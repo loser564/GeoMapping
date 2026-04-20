@@ -1,0 +1,21 @@
+services:
+  # ---- Run once: geocode postal prefixes ----
+  geocoder:
+    build: ./geocoder
+    volumes:
+      - ./data:/data          # mounts your local data/ into the container at /data
+    environment:
+      - ONEMAP_EMAIL=${ONEMAP_EMAIL:-}
+      - ONEMAP_PASSWORD=${ONEMAP_PASSWORD:-}
+      - IN_DOCKER=1           # tells the script to use /data instead of relative path
+    profiles:
+      - tools
+
+  # ---- Frontend dashboard ----
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    environment:
+      - DATAGOVSG_API_KEY=${DATAGOVSG_API_KEY:-}
+    restart: unless-stopped
