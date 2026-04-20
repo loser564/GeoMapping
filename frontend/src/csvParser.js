@@ -3,7 +3,7 @@
 // Supports pre-geocoded CSVs (with lat/lng from postal_geocoder.py output).
 
 // Parses a single CSV line respecting quoted fields (handles comorbidities with commas)
-function parseCSVLine(line) {
+export function parseCSVLine(line) {
   const fields = [];
   let cur = "";
   let inQuotes = false;

@@ -1,29 +1,74 @@
+// envService.js
+// Fetches real-time environment data from Data.gov.sg v2 APIs.
+//
+// PSI/PM2.5 response shape:
+// { code: 0, data: { items: [{ timestamp, readings: { psi_twenty_four_hourly: { west, east, central, south, north }, ... } }] } }
+//
+// Air temp response shape:
+// { code: 0, data: { stations: [{ id, name, location }], readings: [{ timestamp, data: [{ stationId, value }] }] } }
+//
+// Note: v2 API has NO national aggregate — we compute it as the average of the 5 regions.
+
 import { ENV_API } from "./config";
 
-function getPsiStatus(value) {
-  if (value == null) return "loading";
-  if (value <= 50) return "Good";
-  if (value <= 100) return "Moderate";
+const REGIONS = ["west", "east", "central", "south", "north"];
+
+// Compute average of regional values as a national proxy
+function regionAvg(regionObj) {
+  if (!regionObj) return null;
+  const vals = REGIONS.map(r => regionObj[r]).filter(v => v != null);
+  if (!vals.length) return null;
+  return Math.round(vals.reduce((a, b) => a + b, 0) / vals.length);
+}
+
+// Compute max of regional values (PSI national = max per NEA convention)
+function regionMax(regionObj) {
+  if (!regionObj) return null;
+  const vals = REGIONS.map(r => regionObj[r]).filter(v => v != null);
+  if (!vals.length) return null;
+  return Math.max(...vals);
+}
+
+// Average air temperature across all stations
+function avgAirTemp(airRes) {
+  const readings = airRes?.data?.readings?.[0]?.data;
+  if (!readings?.length) return null;
+  const vals = readings.map(d => d.value).filter(v => v != null);
+  if (!vals.length) return null;
+  return (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(1);
+}
+
+function getPsiStatus(v) {
+  if (v == null) return "loading";
+  if (v <= 50)  return "Good";
+  if (v <= 100) return "Moderate";
   return "Unhealthy";
 }
 
-function getPm25Status(value) {
-  if (value == null) return "loading";
-  if (value <= 55) return "Good";
-  if (value <= 150) return "Moderate";
+function getPm25Status(v) {
+  if (v == null) return "loading";
+  if (v <= 55)  return "Good";
+  if (v <= 150) return "Moderate";
   return "Unhealthy";
 }
 
-function getSubIndexStatus(value) {
-  if (value == null) return "loading";
-  if (value <= 50) return "Good";
+function getSubIndexStatus(v) {
+  if (v == null) return "loading";
+  if (v <= 50)  return "Good";
   return "Moderate";
 }
 
+function getTempStatus(v) {
+  if (v == null) return "loading";
+  if (v <= 28)  return "Good";
+  if (v <= 32)  return "Moderate";
+  return "Unhealthy";
+}
+
 const DEMO_ENV = {
-  psi: 42, pm25: 18, o3: 12, co: 5, so2: 7, no2: 20,
-  psiStatus: "Good",
-  pm25Status: "Good",
+  psi: 42, pm25: 18, o3: 12, co: 5, so2: 7, no2: 20, airTemp: 29.0,
+  psiStatus: "Good", pm25Status: "Good", o3Status: "Good",
+  coStatus: "Good", tempStatus: "Good",
   timestamp: new Date().toISOString(),
   regional: {
     psi:  { north: 40, south: 45, east: 38, west: 42, central: 44 },
@@ -32,65 +77,66 @@ const DEMO_ENV = {
   isDemo: true,
 };
 
+async function fetchJSON(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`${url} → HTTP ${r.status}`);
+  const json = await r.json();
+  // data.gov.sg uses code:0 for success
+  if (json.code !== 0) throw new Error(`API error: ${json.errorMsg || json.code}`);
+  return json;
+}
+
 export async function fetchEnvironmentData() {
   try {
-    const [psiRes, pm25Res] = await Promise.all([
-      fetch(ENV_API.psi).then(r => {
-        if (!r.ok) throw new Error(`PSI API ${r.status}`);
-        return r.json();
-      }),
-      fetch(ENV_API.pm25).then(r => {
-        if (!r.ok) throw new Error(`PM25 API ${r.status}`);
-        return r.json();
-      }),
+    const [psiRes, pm25Res, airTempRes] = await Promise.all([
+      fetchJSON(ENV_API.psi),
+      fetchJSON(ENV_API.pm25).catch(() => null),
+      fetchJSON(ENV_API.airTemp).catch(() => null),
     ]);
 
-    // v2 structure
-    const psiData = psiRes?.data?.readings;
-    const pm25Data = pm25Res?.data?.readings;
+    const psiReadings  = psiRes?.data?.items?.[0]?.readings;
+    const pm25Readings = pm25Res?.data?.items?.[0]?.readings;
 
-    if (!psiData) {
-      console.warn("PSI response missing readings:", psiRes);
+    if (!psiReadings) {
+      console.warn("PSI readings missing. Response:", JSON.stringify(psiRes));
       return DEMO_ENV;
     }
 
-    const timestamp =
-      psiRes?.data?.timestamp || new Date().toISOString();
+    const timestamp = psiRes?.data?.items?.[0]?.timestamp ?? new Date().toISOString();
 
-    // ---- National values ----
-    const natPsi  = psiData.psi_twenty_four_hourly?.national ?? null;
-    const natPm25 = pm25Data?.pm25_one_hourly?.national ?? null;
+    // Regional breakdowns (direct from API)
+    const psiRegional  = psiReadings.psi_twenty_four_hourly  ?? {};
+    const pm25Regional = pm25Readings?.pm25_one_hourly        ?? psiReadings.pm25_twenty_four_hourly ?? {};
 
-    const natO3  = psiData.o3_sub_index?.national ?? null;
-    const natCo  = psiData.co_sub_index?.national ?? null;
-    const natSo2 = psiData.so2_sub_index?.national ?? null;
-    const natNo2 = psiData.no2_one_hour_max?.national ?? null;
+    // National values: PSI uses max per NEA convention, others use average
+    const natPsi  = regionMax(psiRegional);
+    const natPm25 = regionMax(pm25Regional);
+    const natO3   = regionAvg(psiReadings.o3_sub_index);
+    const natCo   = regionAvg(psiReadings.co_sub_index);
+    const natSo2  = regionAvg(psiReadings.so2_sub_index);
+    const natNo2  = regionAvg(psiReadings.no2_one_hour_max);
+    const airTemp = avgAirTemp(airTempRes);
 
     return {
-      psi: natPsi,
-      pm25: natPm25,
-      o3: natO3,
-      co: natCo,
-      so2: natSo2,
-      no2: natNo2,
-
-      psiStatus: getPsiStatus(natPsi),
+      psi:     natPsi,
+      pm25:    natPm25,
+      o3:      natO3,
+      co:      natCo,
+      so2:     natSo2,
+      no2:     natNo2,
+      airTemp,
+      psiStatus:  getPsiStatus(natPsi),
       pm25Status: getPm25Status(natPm25),
-      o3Status: getSubIndexStatus(natO3),
-      coStatus: getSubIndexStatus(natCo),
-
+      o3Status:   getSubIndexStatus(natO3),
+      coStatus:   getSubIndexStatus(natCo),
+      tempStatus: getTempStatus(parseFloat(airTemp)),
       timestamp,
-
-      regional: {
-        psi:  psiData.psi_twenty_four_hourly || {},
-        pm25: pm25Data?.pm25_one_hourly || {},
-      },
-
+      regional: { psi: psiRegional, pm25: pm25Regional },
       isDemo: false,
     };
 
   } catch (err) {
-    console.error("Environment API fetch failed:", err);
+    console.error("Environment fetch failed:", err.message);
     return DEMO_ENV;
   }
 }

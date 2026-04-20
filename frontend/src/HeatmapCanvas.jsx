@@ -48,15 +48,16 @@ function getTileImage(x, y, z) {
   return tileCache[key];
 }
 
-export function filterPatients(patients, severityFilter, symptomFilter) {
+export function filterPatients(patients, severityFilter, symptomFilter, extraFilter) {
   return patients.filter(p => {
     if (severityFilter > 0 && p.severity < severityFilter) return false;
     if (symptomFilter !== "all" && p.symptoms !== symptomFilter) return false;
+    if (extraFilter && !extraFilter(p)) return false;
     return true;
   });
 }
 
-export default function HeatmapCanvas({ patients, width, height, severityFilter, symptomFilter }) {
+export default function HeatmapCanvas({ patients, width, height, severityFilter, symptomFilter, extraFilter }) {
   const canvasRef = useRef(null);
   const [zoom, setZoom] = useState(12);
   const [center, setCenter] = useState(SG_CENTER);
@@ -109,7 +110,7 @@ export default function HeatmapCanvas({ patients, width, height, severityFilter,
     }
 
     // Filter patients
-    const filtered = filterPatients(patients, severityFilter, symptomFilter);
+    const filtered = filterPatients(patients, severityFilter, symptomFilter, extraFilter);
 
     // Draw heatmap blobs
     filtered.forEach(p => {
@@ -161,7 +162,7 @@ export default function HeatmapCanvas({ patients, width, height, severityFilter,
     ctx.fillStyle = "#fff";
     ctx.font = "bold 12px sans-serif";
     ctx.fillText(`${filtered.length} patients`, 16, 24);
-  }, [patients, width, height, zoom, center, severityFilter, symptomFilter]);
+  }, [patients, width, height, zoom, center, severityFilter, symptomFilter, extraFilter]);
 
   useEffect(() => {
     draw();
