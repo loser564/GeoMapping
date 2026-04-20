@@ -121,10 +121,15 @@ export default function HeatmapCanvas({ patients, width, height, severityFilter,
       const radius = baseRadius + p.severity * (zoom >= 14 ? 3 : 2);
       const alpha = 0.12 + (p.severity / 10) * 0.25;
 
+      // Colour by severity band
+      const [r, g, b] = p.severity >= 7 ? [220, 40, 40]    // red   - high
+                      : p.severity >= 4 ? [217, 119, 6]    // amber - moderate
+                      :                   [5,   150, 105];  // green - low
+
       const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
-      gradient.addColorStop(0, `rgba(220, 40, 40, ${alpha})`);
-      gradient.addColorStop(0.5, `rgba(220, 80, 40, ${alpha * 0.5})`);
-      gradient.addColorStop(1, "rgba(220, 80, 40, 0)");
+      gradient.addColorStop(0,   `rgba(${r}, ${g}, ${b}, ${alpha})`);
+      gradient.addColorStop(0.6, `rgba(${r}, ${g}, ${b}, ${alpha * 0.2})`);
+      gradient.addColorStop(1,   `rgba(${r}, ${g}, ${b}, 0)`);
       ctx.fillStyle = gradient;
       ctx.beginPath();
       ctx.arc(x, y, radius, 0, Math.PI * 2);

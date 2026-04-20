@@ -15,7 +15,7 @@ import TimelineSlider from "./TimelineSlider";
 
 const TABS = [
   { key: "map",   label: "Heatmap" },
-  { key: "stats", label: "Analytics" },
+  { key: "stats", label: "Analytics" }
 ];
 
 // ---- Demographic filter definitions ----
@@ -427,7 +427,8 @@ export default function App() {
           <SeveritySummary patients={filtered} />
 
           <HeatmapCanvas
-            patients={patients} width={860} height={460}
+            patients={showTimeline ? timelinePatients : patients}
+            width={860} height={460}
             severityFilter={filters.severity}
             symptomFilter={filters.symptom}
             extraFilter={p => applyAllFilters([p], filters).length > 0}
@@ -484,6 +485,7 @@ export default function App() {
       )}
 
       {tab === "stats" && <Analytics patients={filtered} />}
+
 
       <div style={{ marginTop: 16, fontSize: 10, color: "#9ca3af", textAlign: "center" }}>
         Data source: api-open.data.gov.sg | Updated: {envData?.timestamp ? new Date(envData.timestamp).toLocaleString() : "--"} | POC v1.0
