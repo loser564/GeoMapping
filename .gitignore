@@ -1,5 +1,32 @@
+# Data
 data/
+*.zip
+
+# Python
 venv/
 __pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Environment / secrets
 .env
-.zip
+.env.*
+*.secret
+
+# Node / frontend (root-level, if any)
+node_modules/
+
+# Docker
+*.log
+
+# AWS / Amplify (handled in frontend/.gitignore but listed here for root-level safety)
+aws-exports.js
+awsconfiguration.json
+amplifyconfiguration.json
+amplify-build-config.json
+
+# OS
+.DS_Store
+Thumbs.db
