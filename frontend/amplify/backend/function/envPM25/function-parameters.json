@@ -1,0 +1,9 @@
+{
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "datagovsgApiKey",
+      "environmentVariableName": "DATAGOVSG_API_KEY"
+    }
+  ]
+}

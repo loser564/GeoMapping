@@ -1,0 +1,22 @@
+{
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "s3Bucket",
+      "environmentVariableName": "S3_BUCKET"
+    },
+    {
+      "cloudFormationParameterName": "scoresFile",
+      "environmentVariableName": "SCORES_FILE"
+    },
+    {
+      "cloudFormationParameterName": "envHistoryFile",
+      "environmentVariableName": "ENV_HISTORY_FILE"
+    },
+    {
+      "cloudFormationParameterName": "demographicsFile",
+      "environmentVariableName": "DEMOGRAPHICS_FILE"
+    }
+  ],
+  "permissions": {}
+}

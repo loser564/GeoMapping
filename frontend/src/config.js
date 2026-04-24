@@ -25,17 +25,21 @@ export const REGIONS = {
   central: { lat: 1.3521, lng: 103.8198, label: "Central" },
 };
 
-// Route env API calls through the nginx proxy to avoid CORS.
-// The proxy is always available when served via Docker/nginx.
-// Only fall back to direct URLs when running via npm start (webpack dev server on :3000).
+// Read API Gateway base URL from .env (REACT_APP_API_GW_URL)
+// Set in frontend/.env:
+//   REACT_APP_API_GW_URL=https://xxxxxxxxxx.execute-api.ap-southeast-1.amazonaws.com/dev
+const API_GW_BASE = process.env.REACT_APP_API_GW_URL || "";
+
+// When running locally via npm start, call data.gov.sg directly.
+// When deployed (Amplify / Docker), route through API Gateway / nginx proxy.
 const IS_DEV_SERVER = window.location.hostname === "localhost"
-  && window.location.port === "3000"
-  && !window.location.pathname.startsWith("/api");
+  && window.location.port === "3000";
 
 export const ENV_API = {
-  psi:     IS_DEV_SERVER ? "https://api-open.data.gov.sg/v2/real-time/api/psi"              : "/api/env/psi",
-  pm25:    IS_DEV_SERVER ? "https://api-open.data.gov.sg/v2/real-time/api/pm25"             : "/api/env/pm25",
-  airTemp: IS_DEV_SERVER ? "https://api-open.data.gov.sg/v2/real-time/api/air-temperature"  : "/api/env/air-temperature",
+  psi:      IS_DEV_SERVER ? "https://api-open.data.gov.sg/v2/real-time/api/psi"              : `${API_GW_BASE}/env/psi`,
+  pm25:     IS_DEV_SERVER ? "https://api-open.data.gov.sg/v2/real-time/api/pm25"             : `${API_GW_BASE}/env/pm25`,
+  airTemp:  IS_DEV_SERVER ? "https://api-open.data.gov.sg/v2/real-time/api/air-temperature"  : `${API_GW_BASE}/env/air-temp`,
+  humidity: IS_DEV_SERVER ? "https://api-open.data.gov.sg/v2/real-time/api/relative-humidity": `${API_GW_BASE}/env/humidity`,
 };
 
 export const ENV_POLL_INTERVAL_MS = 300000; // 5 minutes
@@ -45,15 +49,6 @@ export const SEVERITY_COLORS = {
   moderate: "#d97706",
   high:     "#b91c1c",
 };
-
-export const DEMO_CLUSTERS = [
-  { lat: 1.35, lng: 103.75, weight: 0.35 },
-  { lat: 1.38, lng: 103.78, weight: 0.25 },
-  { lat: 1.32, lng: 103.85, weight: 0.15 },
-  { lat: 1.30, lng: 103.80, weight: 0.10 },
-  { lat: 1.35, lng: 103.90, weight: 0.08 },
-  { lat: 1.40, lng: 103.85, weight: 0.07 },
-];
 
 export const SYMPTOM_LIST = [
   "cough",

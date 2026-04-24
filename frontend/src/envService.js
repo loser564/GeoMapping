@@ -65,17 +65,6 @@ function getTempStatus(v) {
   return "Unhealthy";
 }
 
-const DEMO_ENV = {
-  psi: 42, pm25: 18, o3: 12, co: 5, so2: 7, no2: 20, airTemp: 29.0,
-  psiStatus: "Good", pm25Status: "Good", o3Status: "Good",
-  coStatus: "Good", tempStatus: "Good",
-  timestamp: new Date().toISOString(),
-  regional: {
-    psi:  { north: 40, south: 45, east: 38, west: 42, central: 44 },
-    pm25: { north: 16, south: 20, east: 15, west: 18, central: 19 },
-  },
-  isDemo: true,
-};
 
 async function fetchJSON(url) {
   const r = await fetch(url);
@@ -99,7 +88,7 @@ export async function fetchEnvironmentData() {
 
     if (!psiReadings) {
       console.warn("PSI readings missing. Response:", JSON.stringify(psiRes));
-      return DEMO_ENV;
+      return null;
     }
 
     const timestamp = psiRes?.data?.items?.[0]?.timestamp ?? new Date().toISOString();
@@ -137,6 +126,6 @@ export async function fetchEnvironmentData() {
 
   } catch (err) {
     console.error("Environment fetch failed:", err.message);
-    return DEMO_ENV;
+    return null;
   }
 }

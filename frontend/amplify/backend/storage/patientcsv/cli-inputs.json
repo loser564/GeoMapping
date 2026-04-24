@@ -1,0 +1,14 @@
+{
+  "resourceName": "patientcsv",
+  "policyUUID": "0b5f5067",
+  "bucketName": "geomappingentennapatientcsv",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "S3Trigger40c154be",
+  "groupAccess": {}
+}

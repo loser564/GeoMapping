@@ -1,0 +1,67 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-geomappingentenna-dev-fd132-authRole",
+      "UnauthRoleArn": "arn:aws:iam::501445983011:role/amplify-geomappingentenna-dev-fd132-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::501445983011:role/amplify-geomappingentenna-dev-fd132-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-geomappingentenna-dev-fd132-deployment",
+      "UnauthRoleName": "amplify-geomappingentenna-dev-fd132-unauthRole",
+      "StackName": "amplify-geomappingentenna-dev-fd132",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:501445983011:stack/amplify-geomappingentenna-dev-fd132/2d2bc4f0-3dee-11f1-9be0-029972682f83",
+      "AmplifyAppId": "d3c301i5p0m13s",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-geomappingentenna-dev-fd132-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+    },
+    "categories": {
+      "function": {
+        "envPSI": {
+          "datagovsgApiKey": "v2:076b1cb2288280dd8c1e7de13eb38f3e4475c0c76dfe25df215f186998bf8115:HZUBDbl6IAzaKUn4vkV-g2NLaW3I1dzF",
+          "deploymentBucketName": "amplify-geomappingentenna-dev-fd132-deployment",
+          "s3Key": "amplify-builds/envPSI-3050484f514173516f59-build.zip"
+        },
+        "envPM25": {
+          "datagovsgApiKey": "v2:076b1cb2288280dd8c1e7de13eb38f3e4475c0c76dfe25df215f186998bf8115:HZUBDbl6IAzaKUn4vkV-g2NLaW3I1dzF",
+          "deploymentBucketName": "amplify-geomappingentenna-dev-fd132-deployment",
+          "s3Key": "amplify-builds/envPM25-776f39476c476d52524b-build.zip"
+        },
+        "envTemp": {
+          "datagovsgApiKey": "v2:076b1cb2288280dd8c1e7de13eb38f3e4475c0c76dfe25df215f186998bf8115:HZUBDbl6IAzaKUn4vkV-g2NLaW3I1dzF",
+          "deploymentBucketName": "amplify-geomappingentenna-dev-fd132-deployment",
+          "s3Key": "amplify-builds/envTemp-57746839473066383053-build.zip"
+        },
+        "envHumidity": {
+          "datagovsgApiKey": "v2:076b1cb2288280dd8c1e7de13eb38f3e4475c0c76dfe25df215f186998bf8115:HZUBDbl6IAzaKUn4vkV-g2NLaW3I1dzF",
+          "deploymentBucketName": "amplify-geomappingentenna-dev-fd132-deployment",
+          "s3Key": "amplify-builds/envHumidity-73616167345057583074-build.zip"
+        },
+        "S3Trigger40c154be": {
+          "deploymentBucketName": "amplify-geomappingentenna-dev-fd132-deployment",
+          "s3Key": "amplify-builds/S3Trigger40c154be-7237506938396c4b6178-build.zip"
+        },
+        "csvReader": {
+          "deploymentBucketName": "amplify-geomappingentenna-dev-fd132-deployment",
+          "s3Key": "amplify-builds/csvReader-6d553058432b724b6b57-build.zip",
+          "s3Bucket": "geomapping-entenna-csv",
+          "scoresFile": "combined_symptom_scores.csv",
+          "envHistoryFile": "NTFGH_env_history.csv",
+          "demographicsFile": "combined_demographics.csv"
+        }
+      },
+      "api": {
+        "envAPI": {}
+      },
+      "storage": {
+        "patientcsv": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d3c301i5p0m13s",
+          "type": "manual"
+        }
+      },
+      "auth": {
+        "geomappingentenna2489a093": {}
+      }
+    }
+  }
+}

@@ -5,7 +5,7 @@
 // Endpoint: GET /api/env/psi?date=YYYY-MM-DD
 // Returns readings for every hour of that day.
 
-const ENV_BASE = "/api/env";
+import { ENV_API } from "./config";
 
 // Cache to avoid re-fetching the same date
 const _cache = new Map();
@@ -39,8 +39,8 @@ export async function fetchDayReadings(date) {
 
   try {
     const [psiRes, pm25Res] = await Promise.all([
-      fetch(`${ENV_BASE}/psi?date=${dateStr}`).then(r => r.json()).catch(() => null),
-      fetch(`${ENV_BASE}/pm25?date=${dateStr}`).then(r => r.json()).catch(() => null),
+      fetch(`${ENV_API.psi}?date=${dateStr}`).then(r => r.json()).catch(() => null),
+      fetch(`${ENV_API.pm25}?date=${dateStr}`).then(r => r.json()).catch(() => null),
     ]);
 
     const psiItems  = psiRes?.data?.items  ?? [];

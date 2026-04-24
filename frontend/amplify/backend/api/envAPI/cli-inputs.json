@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "paths": {
+    "/env/psi": {
+      "name": "/env/psi",
+      "lambdaFunction": "envPSI",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    },
+    "/env/pm25": {
+      "name": "/env/pm25",
+      "lambdaFunction": "envPM25",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    },
+    "/env/air-temp": {
+      "name": "/env/air-temp",
+      "lambdaFunction": "envTemp",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    },
+    "/env/humidity": {
+      "name": "/env/humidity",
+      "lambdaFunction": "envHumidity",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    },
+    "/data/{file}": {
+      "name": "/data/{file}",
+      "lambdaFunction": "csvReader",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,311 @@
+{
+  "api": {
+    "envAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "envPSI"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "envPM25"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "envTemp"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "envHumidity"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "csvReader"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "auth": {
+    "geomappingentenna2489a093": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyCharacters": [],
+          "passwordPolicyMinLength": 8
+        },
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "socialProviders": [],
+        "usernameAttributes": [],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito"
+    }
+  },
+  "function": {
+    "S3Trigger40c154be": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "csvReader": {
+      "build": true,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "envHumidity": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "envPM25": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "envPSI": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "envTemp": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "hosting": {
+    "amplifyhosting": {
+      "providerPlugin": "awscloudformation",
+      "service": "amplifyhosting",
+      "type": "manual"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_S3Trigger40c154be_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "S3Trigger40c154be"
+        }
+      ]
+    },
+    "AMPLIFY_function_S3Trigger40c154be_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "S3Trigger40c154be"
+        }
+      ]
+    },
+    "AMPLIFY_function_csvReader_demographicsFile": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "csvReader"
+        }
+      ]
+    },
+    "AMPLIFY_function_csvReader_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "csvReader"
+        }
+      ]
+    },
+    "AMPLIFY_function_csvReader_envHistoryFile": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "csvReader"
+        }
+      ]
+    },
+    "AMPLIFY_function_csvReader_s3Bucket": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "csvReader"
+        }
+      ]
+    },
+    "AMPLIFY_function_csvReader_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "csvReader"
+        }
+      ]
+    },
+    "AMPLIFY_function_csvReader_scoresFile": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "csvReader"
+        }
+      ]
+    },
+    "AMPLIFY_function_envHumidity_datagovsgApiKey": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "envHumidity"
+        }
+      ]
+    },
+    "AMPLIFY_function_envHumidity_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "envHumidity"
+        }
+      ]
+    },
+    "AMPLIFY_function_envHumidity_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "envHumidity"
+        }
+      ]
+    },
+    "AMPLIFY_function_envPM25_datagovsgApiKey": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "envPM25"
+        }
+      ]
+    },
+    "AMPLIFY_function_envPM25_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "envPM25"
+        }
+      ]
+    },
+    "AMPLIFY_function_envPM25_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "envPM25"
+        }
+      ]
+    },
+    "AMPLIFY_function_envPSI_datagovsgApiKey": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "envPSI"
+        }
+      ]
+    },
+    "AMPLIFY_function_envPSI_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "envPSI"
+        }
+      ]
+    },
+    "AMPLIFY_function_envPSI_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "envPSI"
+        }
+      ]
+    },
+    "AMPLIFY_function_envTemp_datagovsgApiKey": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "envTemp"
+        }
+      ]
+    },
+    "AMPLIFY_function_envTemp_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "envTemp"
+        }
+      ]
+    },
+    "AMPLIFY_function_envTemp_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "envTemp"
+        }
+      ]
+    },
+    "AMPLIFY_hosting_amplifyhosting_appId": {
+      "usedBy": [
+        {
+          "category": "hosting",
+          "resourceName": "amplifyhosting"
+        }
+      ]
+    },
+    "AMPLIFY_hosting_amplifyhosting_type": {
+      "usedBy": [
+        {
+          "category": "hosting",
+          "resourceName": "amplifyhosting"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "patientcsv": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "LambdaExecutionRole"
+          ],
+          "category": "function",
+          "resourceName": "S3Trigger40c154be"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "S3"
+    }
+  }
+}

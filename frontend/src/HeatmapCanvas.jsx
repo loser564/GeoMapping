@@ -195,14 +195,17 @@ export default function HeatmapCanvas({ patients, width, height, severityFilter,
     dragRef.current = null;
   };
 
-  // Scroll to zoom
-  const handleWheel = (e) => {
-    e.preventDefault();
-    setZoom(z => {
-      const newZ = e.deltaY < 0 ? z + 1 : z - 1;
-      return Math.max(10, Math.min(18, newZ));
-    });
-  };
+  // Attach wheel listener manually with passive: false to allow preventDefault
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const onWheel = (e) => {
+      e.preventDefault();
+      setZoom(z => Math.max(10, Math.min(18, e.deltaY < 0 ? z + 1 : z - 1)));
+    };
+    canvas.addEventListener("wheel", onWheel, { passive: false });
+    return () => canvas.removeEventListener("wheel", onWheel);
+  }, []);
 
   // Touch support for mobile
   const touchRef = useRef(null);
@@ -247,7 +250,6 @@ export default function HeatmapCanvas({ patients, width, height, severityFilter,
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
-        onWheel={handleWheel}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
